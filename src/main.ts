@@ -1,5 +1,6 @@
 import { Application, Assets, Sprite, Container } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
+import { handleGameState } from "./state";
 
 (async () => {
   // Create a new application
@@ -7,7 +8,7 @@ import { initDevtools } from "@pixi/devtools";
   initDevtools({ app });
 
   // Initialize the application
-  await app.init({ background: "#1099bb", resizeTo: window });
+  await app.init({ background: "#1099bb", resizeTo: window, autoStart: false });
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
@@ -24,6 +25,7 @@ import { initDevtools } from "@pixi/devtools";
     bunny.x = (i % 5) * 40;
     bunny.y = Math.floor(i / 5) * 40;
     bunny.tint = "white";
+    bunny.cullable = true;
     bunnyContainer.addChild(bunny);
   }
 
@@ -41,4 +43,6 @@ import { initDevtools } from "@pixi/devtools";
     // * Creates frame-independent transformation *
     bunnyContainer.rotation += 0.01 * time.deltaTime;
   });
+
+  handleGameState(app);
 })();
