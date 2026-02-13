@@ -10,6 +10,13 @@ import { handleGameState } from "./state";
   // Initialize the application
   await app.init({ background: "#1099bb", resizeTo: window, autoStart: false });
 
+  // CSS style for icons
+  const defaultIcon = "url('https://pixijs.com/assets/bunny.png'),auto";
+  const hoverIcon = "url('https://pixijs.com/assets/bunny_saturated.png'),auto";
+
+  // Add custom cursor styles
+  app.renderer.events.cursorStyles.default = defaultIcon;
+  app.renderer.events.cursorStyles.hoverTest = hoverIcon;
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
@@ -27,11 +34,12 @@ import { handleGameState } from "./state";
     bunny.y = Math.floor(i / 5) * 40;
     bunny.tint = "white";
     bunny.cullable = true;
-    bunnies.push(bunny);
     bunny.eventMode = "static";
+    bunny.cursor = "hoverTest";
     bunny.on("pointerdown", () => {
       bunny.tint = "black";
     });
+    bunnies.push(bunny);
 
     bunnyContainer.addChild(bunny);
   }
