@@ -16,16 +16,18 @@ import { handleGameState } from "./state";
   const bunnyContainer = new Container();
   app.stage.addChild(bunnyContainer);
 
-  // Load the bunny texture
   const texture = await Assets.load("/assets/bunny.png");
 
+  const bunnies: Sprite[] = [];
   for (let i = 0; i < 25; i++) {
+    // Load the bunny texture
     const bunny = new Sprite(texture);
 
     bunny.x = (i % 5) * 40;
     bunny.y = Math.floor(i / 5) * 40;
     bunny.tint = "white";
     bunny.cullable = true;
+    bunnies.push(bunny);
     bunnyContainer.addChild(bunny);
   }
 
@@ -41,6 +43,9 @@ import { handleGameState } from "./state";
     // Just for fun, let's rotate mr rabbit a little.
     // * Delta is 1 if running at 100% performance *
     // * Creates frame-independent transformation *
+    bunnies.forEach((bunny, key) => {
+      bunny.rotation += (0.01 + parseFloat(`0.0${key}`)) * time.deltaTime;
+    });
     bunnyContainer.rotation += 0.01 * time.deltaTime;
   });
 
