@@ -28,6 +28,11 @@ import { handleGameState } from "./state";
     bunny.tint = "white";
     bunny.cullable = true;
     bunnies.push(bunny);
+    bunny.eventMode = "static";
+    bunny.on("pointerdown", () => {
+      bunny.tint = "black";
+    });
+
     bunnyContainer.addChild(bunny);
   }
 
