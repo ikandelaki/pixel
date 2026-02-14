@@ -1,6 +1,7 @@
 import { Application, Assets, Sprite, Container, RenderLayer } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
 import { handleGameState } from "./state";
+import { renderMenu } from "./scenes/menu";
 
 const renderBunnyGame = async (app: Application) => {
   // CSS style for icons
@@ -85,18 +86,19 @@ const renderOnBackground = async (app: Application) => {
 
   app.stage.addChild(background);
 };
+// Create a new application
+export const app = new Application();
+initDevtools({ app });
+export default app;
 
 (async () => {
-  // Create a new application
-  const app = new Application();
-  initDevtools({ app });
-
   // Initialize the application
   await app.init({ background: "#1099bb", resizeTo: window, autoStart: false });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   // renderBunnyGame(app);
+  await renderMenu();
   renderOnBackground(app);
   handleGameState(app);
 })();
