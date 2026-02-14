@@ -1,15 +1,8 @@
-import { Application, Assets, Sprite, Container } from "pixi.js";
+import { Application, Assets, Sprite, Container, RenderLayer } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
 import { handleGameState } from "./state";
 
-(async () => {
-  // Create a new application
-  const app = new Application();
-  initDevtools({ app });
-
-  // Initialize the application
-  await app.init({ background: "#1099bb", resizeTo: window, autoStart: false });
-
+const renderBunnyGame = async (app: Application) => {
   // CSS style for icons
   const defaultIcon = "url('https://pixijs.com/assets/bunny.png'),auto";
   const hoverIcon = "url('https://pixijs.com/assets/bunny_saturated.png'),auto";
@@ -18,7 +11,6 @@ import { handleGameState } from "./state";
   app.renderer.events.cursorStyles.default = defaultIcon;
   app.renderer.events.cursorStyles.hoverTest = hoverIcon;
   // Append the application canvas to the document body
-  document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   const bunnyContainer = new Container();
   app.stage.addChild(bunnyContainer);
@@ -61,6 +53,50 @@ import { handleGameState } from "./state";
     });
     bunnyContainer.rotation += 0.01 * time.deltaTime;
   });
+};
 
+const renderOnBackground = async (app: Application) => {
+  const bgManifest = {
+    bundles: [
+      {
+        name: "background",
+        assets: [
+          {
+            alias: "flowerTop",
+            src: "https://pixijs.com/assets/flowerTop.png",
+          },
+        ],
+      },
+      {
+        name: "game-screen",
+        assets: [
+          { alias: "eggHead", src: "https://pixijs.com/assets/eggHead.png" },
+        ],
+      },
+    ],
+  };
+
+  await Assets.init({ manifest: bgManifest });
+  Assets.backgroundLoadBundle(["game-screen", "background"]);
+
+  const { flowerTop } = await Assets.loadBundle("background");
+
+  const background = new Sprite(flowerTop);
+
+  app.stage.addChild(background);
+};
+
+(async () => {
+  // Create a new application
+  const app = new Application();
+  initDevtools({ app });
+
+  // Initialize the application
+  await app.init({ background: "#1099bb", resizeTo: window, autoStart: false });
+
+  document.getElementById("pixi-container")!.appendChild(app.canvas);
+
+  // renderBunnyGame(app);
+  renderOnBackground(app);
   handleGameState(app);
 })();
