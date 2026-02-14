@@ -80,7 +80,7 @@ const renderOnBackground = async (app: Application) => {
   await Assets.init({ manifest: bgManifest });
   Assets.backgroundLoadBundle(["game-screen", "background"]);
 
-  const { flowerTop } = await Assets.loadBundle("background");
+  const { flowerTop } = (await Assets.loadBundle("background")) || {};
 
   const background = new Sprite(flowerTop);
 
