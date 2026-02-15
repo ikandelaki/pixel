@@ -1,13 +1,17 @@
 import { Container } from "pixi.js";
 import app from "../main";
 import { createButton } from "../components/Button";
+import { handleGameStart, handleGamePause } from "../state";
 
 export const renderMenu = async () => {
   const menuContainer = new Container();
-  const button = await createButton("Start", 50, 50, () => {
-    console.log(">> click");
-  });
+  const startButton = await createButton("Start", 50, 50, handleGameStart);
+  const pauseButton = await createButton("Pause", 150, 50, handleGamePause);
+  menuContainer.position = {
+    x: app.screen.width / 2,
+    y: app.screen.height / 2,
+  };
 
-  menuContainer.addChild(button);
+  menuContainer.addChild(startButton, pauseButton);
   app.stage.addChild(menuContainer);
 };

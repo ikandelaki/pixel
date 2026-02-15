@@ -100,5 +100,4 @@ export default app;
   // renderBunnyGame(app);
   await renderMenu();
   renderOnBackground(app);
-  handleGameState(app);
 })();
