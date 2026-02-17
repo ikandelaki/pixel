@@ -2,6 +2,7 @@ import { Application, Assets, Sprite, Container, RenderLayer } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
 import { handleGameState } from "./state";
 import { renderMenu } from "./scenes/menu";
+import { renderGame } from "./scenes/game";
 
 const renderBunnyGame = async (app: Application) => {
   // CSS style for icons
@@ -86,9 +87,12 @@ const renderOnBackground = async (app: Application) => {
 
   app.stage.addChild(background);
 };
+
 // Create a new application
 export const app = new Application();
+
 initDevtools({ app });
+
 export default app;
 
 (async () => {
@@ -99,5 +103,6 @@ export default app;
 
   // renderBunnyGame(app);
   await renderMenu();
+  await renderGame();
   renderOnBackground(app);
 })();
