@@ -14,17 +14,21 @@ const createBackground = async () => {
   const backgroundHeight = backgroundWidth * ratio;
 
   background.setSize(backgroundWidth, backgroundHeight);
-  background.x = app.screen.width / 2 - background.width / 2;
-  background.y = app.screen.height / 2 - background.height / 2;
+  background.position.set(
+    app.screen.width / 2 - background.width / 2,
+    app.screen.height / 2 - background.height / 2,
+  );
   return background;
 };
 
 export const renderGame = async () => {
-  const scene = new Container();
-
   const background = await createBackground();
-  const rocket = await createRocket(150, 150);
-  scene.addChild(background);
-  scene.addChild(rocket);
-  app.stage.addChild(scene);
+  const rocket = await createRocket();
+  background.addChild(rocket);
+  rocket.position.set(
+    background.x * 2,
+    background.texture.height - rocket.height,
+  );
+
+  app.stage.addChild(background);
 };
