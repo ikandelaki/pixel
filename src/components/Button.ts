@@ -1,16 +1,16 @@
 import { Assets, Container, Graphics, Text } from "pixi.js";
 
+export const BUTTON_PADDING_X = 24;
+export const BUTTON_PADDING_Y = 12;
+export const BUTTON_COLOR = 0xfa5252;
+export const BUTTON_HOVER_COLOR = 0xc92a2a;
+
 export const createButton = async (
   text: string,
   x: number | string,
   y: number | string,
   onClick: () => void,
 ): Promise<Container> => {
-  const buttonPaddingX = 24;
-  const buttonPaddingY = 12;
-  const buttonColor = 0x00ff00;
-  const buttonHoverColor = 0x32cd32;
-
   await Assets.load({
     src: "/assets/fonts/Orbitron.woff2",
     data: {
@@ -31,11 +31,11 @@ export const createButton = async (
   });
 
   // Calculate button width and height dynamically
-  const buttonWidth = buttonText.width + buttonPaddingX;
-  const buttonHeight = buttonText.height + buttonPaddingY;
+  const buttonWidth = buttonText.width + BUTTON_PADDING_X;
+  const buttonHeight = buttonText.height + BUTTON_PADDING_Y;
 
   buttonGraphic.roundRect(0, 0, buttonWidth, buttonHeight, 15);
-  buttonGraphic.fill(buttonColor);
+  buttonGraphic.fill(BUTTON_COLOR);
 
   buttonText.x = buttonGraphic.width / 2;
   buttonText.y = buttonGraphic.height / 2;
@@ -52,11 +52,11 @@ export const createButton = async (
   buttonContainer.on("pointerdown", onClick);
 
   buttonContainer.on("pointerover", () => {
-    buttonGraphic.tint = buttonHoverColor;
+    buttonGraphic.tint = BUTTON_HOVER_COLOR;
   });
 
   buttonContainer.on("pointerout", () => {
-    buttonGraphic.tint = buttonColor;
+    buttonGraphic.tint = BUTTON_COLOR;
   });
 
   return buttonContainer;
