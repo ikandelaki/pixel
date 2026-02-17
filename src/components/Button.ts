@@ -7,9 +7,9 @@ export const BUTTON_HOVER_COLOR = 0xc92a2a;
 
 export const createButton = async (
   text: string,
-  x: number | string,
-  y: number | string,
   onClick: () => void,
+  x: number = 0,
+  y: number = 0,
 ): Promise<Container> => {
   await Assets.load({
     src: "/assets/fonts/Orbitron.woff2",

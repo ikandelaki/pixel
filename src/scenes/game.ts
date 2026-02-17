@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite } from "pixi.js";
+import { Assets, Sprite } from "pixi.js";
 import { createRocket } from "../components/Rocket";
 import app from "../main";
 
