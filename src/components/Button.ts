@@ -6,8 +6,8 @@ export const createButton = async (
   y: number | string,
   onClick: () => void,
 ): Promise<Container> => {
-  const buttonWidth = 120;
-  const buttonHeight = 50;
+  const buttonPaddingX = 24;
+  const buttonPaddingY = 12;
   const buttonColor = 0x00ff00;
   const buttonHoverColor = 0x32cd32;
 
@@ -19,8 +19,6 @@ export const createButton = async (
   });
 
   const buttonGraphic = new Graphics();
-  buttonGraphic.roundRect(0, 0, buttonWidth, buttonHeight, 15);
-  buttonGraphic.fill(buttonColor);
 
   const buttonText = new Text({
     text,
@@ -32,6 +30,13 @@ export const createButton = async (
     anchor: 0.5,
   });
 
+  // Calculate button width and height dynamically
+  const buttonWidth = buttonText.width + buttonPaddingX;
+  const buttonHeight = buttonText.height + buttonPaddingY;
+
+  buttonGraphic.roundRect(0, 0, buttonWidth, buttonHeight, 15);
+  buttonGraphic.fill(buttonColor);
+
   buttonText.x = buttonGraphic.width / 2;
   buttonText.y = buttonGraphic.height / 2;
 
@@ -41,19 +46,17 @@ export const createButton = async (
 
   buttonContainer.addChild(buttonGraphic, buttonText);
 
-  // 4. Add Interactivity
-  buttonContainer.eventMode = "static"; // Required for interaction
-  buttonContainer.cursor = "pointer"; // Shows a pointer cursor on hover
+  buttonContainer.eventMode = "static";
+  buttonContainer.cursor = "pointer";
 
   buttonContainer.on("pointerdown", onClick);
 
-  // Optional: Add hover effects for better user experience
   buttonContainer.on("pointerover", () => {
-    buttonGraphic.tint = buttonHoverColor; // slightly darken or change color on hover
+    buttonGraphic.tint = buttonHoverColor;
   });
 
   buttonContainer.on("pointerout", () => {
-    buttonGraphic.tint = buttonColor; // restore original color
+    buttonGraphic.tint = buttonColor;
   });
 
   return buttonContainer;
