@@ -97,7 +97,7 @@ export default app;
 
 (async () => {
   // Initialize the application
-  await app.init({ background: "#1099bb", resizeTo: window });
+  await app.init({ background: "#212529", resizeTo: window });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
