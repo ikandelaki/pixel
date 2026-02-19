@@ -3,6 +3,8 @@ import { initDevtools } from "@pixi/devtools";
 import { renderMenu } from "./scenes/menu";
 import { renderGame } from "./scenes/game";
 
+const TEST = 5;
+
 const renderOnBackground = async (app: Application) => {
   const bgManifest = {
     bundles: [
