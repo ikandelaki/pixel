@@ -1,6 +1,6 @@
 import { Assets, Container, Sprite } from "pixi.js";
 
-export const ROCKET_WIDTH = 650;
+export const ROCKET_WIDTH = 80;
 
 export const createRocket = async (x: number = 0, y: number = 0) => {
   const rocketContainer = new Container();

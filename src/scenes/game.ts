@@ -26,6 +26,7 @@ const createBackground = async () => {
 
   backgroundContainer.addChild(mask);
   backgroundContainer.mask = mask;
+  // backgroundContainer.setSize(viewWidth, viewHeight);
 
   backgroundContainer.position.set(
     app.screen.width / 2 - backgroundContainer.width / 2,
@@ -49,7 +50,10 @@ export const renderGame = async () => {
   const background = await createBackground();
   const rocket = await createRocket();
   background.addChild(rocket);
-  rocket.position.set(20, background.height - rocket.height);
+  rocket.position.set(
+    background.width / 2 - rocket.width / 2,
+    background.height - rocket.height,
+  );
 
   app.stage.addChild(background);
 };
