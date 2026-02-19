@@ -2,6 +2,7 @@ import { Application, Assets, Sprite } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
 import { renderMenu } from "./scenes/menu";
 import { renderGame } from "./scenes/game";
+import { setupKeyboardListeners } from "./listeners/keyboard";
 
 const renderOnBackground = async (app: Application) => {
   const bgManifest = {
@@ -47,6 +48,7 @@ export default app;
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
+  setupKeyboardListeners();
   await renderMenu();
   await renderGame();
   renderOnBackground(app);
