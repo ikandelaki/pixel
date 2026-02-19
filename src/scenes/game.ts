@@ -2,6 +2,8 @@ import { Assets, Sprite, Container, Graphics } from "pixi.js";
 import { createRocket } from "../components/Rocket";
 import app from "../main";
 
+const BACKGROUND_SCROLL_SPEED = 0.5;
+
 const createBackground = async () => {
   const backgroundContainer = new Container();
   const backgroundTexture = await Assets.load({
@@ -30,17 +32,23 @@ const createBackground = async () => {
     app.screen.height / 2 - backgroundContainer.height / 2,
   );
 
-  // background.position.set(
-  //   backgroundContainer.position.x,
-  //   backgroundContainer.position.y * 2,
-  // );
+  background.y = -(background.height - viewHeight);
+
+  app.ticker.add((ticker) => {
+    const scrollDistance = BACKGROUND_SCROLL_SPEED * ticker.deltaTime;
+
+    if (background.y < 0) {
+      background.y += scrollDistance;
+    }
+  });
+
   return backgroundContainer;
 };
 
 export const renderGame = async () => {
   const background = await createBackground();
   const rocket = await createRocket();
-  // background.addChild(rocket);
+  background.addChild(rocket);
   rocket.position.set(20, background.height - rocket.height);
 
   app.stage.addChild(background);
