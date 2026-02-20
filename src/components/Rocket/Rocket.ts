@@ -1,6 +1,5 @@
 import { Assets, Container, Sprite } from "pixi.js";
-
-export const ROCKET_WIDTH = 650;
+import { rocketConfig } from "./Rocket.config";
 
 export const createRocket = async (x: number = 0, y: number = 0) => {
   const rocketContainer = new Container();
@@ -15,8 +14,8 @@ export const createRocket = async (x: number = 0, y: number = 0) => {
   const originalHeight = rocket.texture.orig.height;
 
   const aspectRatio = originalHeight / originalWidth;
-  rocket.width = ROCKET_WIDTH;
-  rocket.height = aspectRatio * ROCKET_WIDTH;
+  rocket.width = rocketConfig.width;
+  rocket.height = aspectRatio * rocketConfig.width;
 
   rocketContainer.addChild(rocket);
   rocketContainer.position.set(x, y);
