@@ -1,24 +1,12 @@
-import { Assets, Container, Sprite } from "pixi.js";
+import { Assets } from "pixi.js";
 import { rocketConfig } from "./Rocket.config";
+import { createCustomSprite } from "../CustomSprite/CustomSprite";
 
 export const createRocket = async (x: number = 0, y: number = 0) => {
-  const rocketContainer = new Container();
   const rocketTexture = await Assets.load({
     alias: "rocket",
     src: "/assets/rocket.png",
   });
 
-  const rocket = new Sprite(rocketTexture);
-
-  const originalWidth = rocket.texture.orig.width;
-  const originalHeight = rocket.texture.orig.height;
-
-  const aspectRatio = originalHeight / originalWidth;
-  rocket.width = rocketConfig.width;
-  rocket.height = aspectRatio * rocketConfig.width;
-
-  rocketContainer.addChild(rocket);
-  rocketContainer.position.set(x, y);
-
-  return rocketContainer;
+  return createCustomSprite(rocketTexture, rocketConfig.width, x, y);
 };

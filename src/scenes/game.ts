@@ -10,6 +10,7 @@ import {
   KEY_RIGHT,
   keyState,
 } from "../listeners/keyboard";
+import { createEnemy } from "../components/Enemy/Enemy";
 
 const handleRocketMove = (rocket: Container, background: Container) => {
   app.ticker.add(() => {
@@ -48,8 +49,10 @@ const handleRocketMove = (rocket: Container, background: Container) => {
 export const renderGame = async () => {
   const background = await createBackground();
   const rocket = await createRocket();
+  const enemy = await createEnemy();
 
   background.addChild(rocket);
+  background.addChild(enemy);
   rocket.position.set(
     background.width / 2 - rocket.width / 2,
     background.height - rocket.height,
