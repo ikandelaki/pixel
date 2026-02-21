@@ -91,16 +91,14 @@ export const handleRocketBulletMove = (
       const bullet = bullets[i];
       bullet.y -= bulletConfig.speed;
 
-      //   if (bullet.y > background.y) {
-      //     background.removeChild(bullet);
-      //     bullet.destroy();
-      //     bullets.splice(i, 1);
-      //   }
+      if (bullet.y + bullet.height < 0) {
+        background.removeChild(bullet);
+        bullet.destroy();
+        bullets.splice(i, 1);
+      }
     }
 
-    console.log(">> ticker", ticker);
     if (elapsed >= bulletConfig.spawnSpeed) {
-      console.log(">> creating a bullet, elasped:", elapsed);
       createNewBullet(rocket, background, bullets);
       elapsed = 0;
     }
