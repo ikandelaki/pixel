@@ -8,5 +8,13 @@ export const createRocket = async (x: number = 0, y: number = 0) => {
     src: "/assets/rocket.png",
   });
 
-  return createCustomSprite(rocketTexture, rocketConfig.width, x, y);
+  const rocket = await createCustomSprite(
+    rocketTexture,
+    rocketConfig.width,
+    x,
+    y,
+  );
+
+  rocket.zIndex = 2;
+  return rocket;
 };

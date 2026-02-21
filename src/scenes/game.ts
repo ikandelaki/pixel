@@ -3,7 +3,11 @@ import { createBackground } from "../components/Background/Background";
 import app from "../main";
 import { createEnemy } from "../components/Enemy/Enemy";
 import { enemyConfig } from "../components/Enemy/Enemy.config";
-import { handleEnemyMove, handleRocketMove } from "../handlers/movement";
+import {
+  handleEnemyMove,
+  handleRocketMove,
+  handleRocketBulletMove,
+} from "../handlers/movement";
 
 export const renderGame = async () => {
   const background = await createBackground();
@@ -24,6 +28,7 @@ export const renderGame = async () => {
 
   handleRocketMove(rocket, background);
   handleEnemyMove(enemy, background);
+  handleRocketBulletMove(rocket, background);
 
   app.stage.addChild(background);
 };
