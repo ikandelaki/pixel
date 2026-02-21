@@ -1,5 +1,5 @@
 import { createRocket } from "../components/Rocket/Rocket";
-import { createBackground } from "../components/Background";
+import { createBackground } from "../components/Background/Background";
 import app from "../main";
 import { rocketConfig } from "../components/Rocket/Rocket.config";
 import { Container } from "pixi.js";

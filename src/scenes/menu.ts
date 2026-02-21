@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import app from "../main";
-import { createButton } from "../components/Button";
+import { createButton } from "../components/Button/Button";
 import { handleGameStart, handleGamePause } from "../state";
 
 export const renderMenu = async () => {

@@ -1,5 +1,5 @@
 import { Sprite, Assets, Container, Graphics } from "pixi.js";
-import app from "../main";
+import app from "../../main";
 
 const BACKGROUND_SCROLL_SPEED = 0.5;
 
