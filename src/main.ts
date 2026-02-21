@@ -2,7 +2,7 @@ import { Application, Assets, Sprite } from "pixi.js";
 import { initDevtools } from "@pixi/devtools";
 import { renderMenu } from "./scenes/menu";
 import { renderGame } from "./scenes/game";
-import { setupKeyboardListeners } from "./listeners/keyboard";
+import { setupKeyboardListeners } from "./handlers/keyboard";
 
 const renderOnBackground = async (app: Application) => {
   const bgManifest = {

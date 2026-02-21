@@ -1,55 +1,19 @@
 import { createRocket } from "../components/Rocket/Rocket";
 import { createBackground } from "../components/Background/Background";
 import app from "../main";
-import { rocketConfig } from "../components/Rocket/Rocket.config";
-import { Container } from "pixi.js";
-import {
-  KEY_UP,
-  KEY_DOWN,
-  KEY_LEFT,
-  KEY_RIGHT,
-  keyState,
-} from "../listeners/keyboard";
 import { createEnemy } from "../components/Enemy/Enemy";
-
-const handleRocketMove = (rocket: Container, background: Container) => {
-  app.ticker.add(() => {
-    if (keyState.has(KEY_UP)) {
-      const nextYUp = rocket.y - rocketConfig.speed;
-      if (nextYUp >= 0) {
-        rocket.position.y -= rocketConfig.speed;
-      }
-    }
-
-    if (keyState.has(KEY_DOWN)) {
-      const nextYDown = rocket.y + rocketConfig.speed;
-      if (nextYDown + rocket.height <= background.height) {
-        rocket.position.y += rocketConfig.speed;
-      }
-    }
-
-    if (keyState.has(KEY_LEFT)) {
-      const nextXLeft = rocket.position.x + rocketConfig.speed;
-
-      if (nextXLeft >= 0) {
-        rocket.position.x -= rocketConfig.speed;
-      }
-    }
-
-    if (keyState.has(KEY_RIGHT)) {
-      const nextXRight = rocket.position.x + rocketConfig.speed;
-
-      if (nextXRight + rocket.width <= background.width) {
-        rocket.position.x += rocketConfig.speed;
-      }
-    }
-  });
-};
+import { enemyConfig } from "../components/Enemy/Enemy.config";
+import { handleEnemyMove, handleRocketMove } from "../handlers/movement";
 
 export const renderGame = async () => {
   const background = await createBackground();
   const rocket = await createRocket();
-  const enemy = await createEnemy();
+
+  const enemySpawnPointX = Math.max(
+    Math.ceil(Math.random() * background.width) - enemyConfig.width,
+    enemyConfig.width,
+  );
+  const enemy = await createEnemy(enemySpawnPointX);
 
   background.addChild(rocket);
   background.addChild(enemy);
@@ -59,6 +23,7 @@ export const renderGame = async () => {
   );
 
   handleRocketMove(rocket, background);
+  handleEnemyMove(enemy, background);
 
   app.stage.addChild(background);
 };
