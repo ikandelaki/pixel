@@ -6,7 +6,7 @@ import { enemyConfig } from "../components/Enemy/Enemy.config";
 import {
   handleEnemyMove,
   handleRocketMove,
-  handleRocketBulletMove,
+  handleBullets,
 } from "../handlers/movement";
 import { state } from "../state";
 
@@ -31,7 +31,7 @@ export const renderGame = async () => {
 
   handleRocketMove(rocket, background);
   handleEnemyMove(enemy, background);
-  handleRocketBulletMove(rocket, background);
+  handleBullets(rocket, background);
 
   app.stage.addChild(background);
 };

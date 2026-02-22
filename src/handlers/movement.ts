@@ -67,10 +67,7 @@ export const handleEnemyMove = (enemy: Container, background: Container) => {
   app.ticker.add(moveEnemy);
 };
 
-export const handleRocketBulletMove = (
-  rocket: Container,
-  background: Container,
-) => {
+export const handleBullets = (rocket: Container, background: Container) => {
   let elapsed = 0;
 
   // Separate the bullet creation to keep the ticker clean
@@ -88,7 +85,27 @@ export const handleRocketBulletMove = (
     bullets.push(bullet);
   };
 
-  const createBulletAndShoot = async (ticker: Ticker) => {
+  const isColliding = (bullet: Container, enemy: Container): boolean => {
+    return (
+      bullet.y <= enemy.y &&
+      bullet.x >= enemy.x &&
+      bullet.x <= enemy.x + enemy.width
+    );
+  };
+
+  const destroyBullet = (bullet: Container, index: number) => {
+    background.removeChild(bullet);
+    bullet.destroy();
+    state.bullets.splice(index, 1);
+  };
+
+  const destroyEnemy = (enemy: Container, index: number) => {
+    background.removeChild(enemy);
+    enemy.destroy();
+    state.enemies.splice(index, 1);
+  };
+
+  const setupBullets = async (ticker: Ticker) => {
     elapsed += ticker.deltaMS;
 
     for (let i = state.bullets.length - 1; i >= 0; i--) {
@@ -96,27 +113,16 @@ export const handleRocketBulletMove = (
       bullet.y -= bulletConfig.speed;
 
       if (bullet.y + bullet.height < 0) {
-        background.removeChild(bullet);
-        bullet.destroy();
-        state.bullets.splice(i, 1);
+        destroyBullet(bullet, i);
         break;
       }
 
       for (let j = state.enemies.length - 1; j >= 0; j--) {
         const enemy = state.enemies[j];
 
-        if (
-          bullet.y <= enemy.y &&
-          bullet.x >= enemy.x &&
-          bullet.x <= enemy.x + enemy.width
-        ) {
-          background.removeChild(enemy);
-          enemy.destroy();
-          state.enemies.splice(j, 1);
-
-          background.removeChild(bullet);
-          bullet.destroy();
-          state.bullets.splice(i, 1);
+        if (isColliding(bullet, enemy)) {
+          destroyEnemy(enemy, j);
+          destroyBullet(bullet, i);
           break;
         }
       }
@@ -128,5 +134,5 @@ export const handleRocketBulletMove = (
     }
   };
 
-  app.ticker.add(createBulletAndShoot);
+  app.ticker.add(setupBullets);
 };
