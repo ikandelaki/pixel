@@ -1,24 +1,26 @@
 import { Container, Sprite, SpriteOptions, Texture } from "pixi.js";
 
-export const createCustomSprite = async (
-  options?: SpriteOptions | Texture,
-  width: number = 50,
-  x: number = 0,
-  y: number = 0,
-) => {
-  const spriteContainer = new Container();
+export class CustomSprite extends Container {
+  protected sprite: Sprite;
 
-  const sprite = new Sprite(options);
+  constructor(
+    options?: SpriteOptions | Texture,
+    width: number = 50,
+    x: number = 0,
+    y: number = 0,
+  ) {
+    super();
 
-  const originalWidth = sprite.texture.orig.width;
-  const originalHeight = sprite.texture.orig.height;
+    this.sprite = new Sprite(options);
 
-  const aspectRatio = originalHeight / originalWidth;
-  sprite.width = width;
-  sprite.height = aspectRatio * width;
+    const originalWidth = this.sprite.texture.orig.width;
+    const originalHeight = this.sprite.texture.orig.height;
 
-  spriteContainer.addChild(sprite);
-  spriteContainer.position.set(x, y);
+    const aspectRatio = originalHeight / originalWidth;
+    this.sprite.width = width;
+    this.sprite.height = aspectRatio * width;
 
-  return spriteContainer;
-};
+    this.addChild(this.sprite);
+    this.position.set(x, y);
+  }
+}

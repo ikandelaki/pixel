@@ -5,59 +5,67 @@ export const BUTTON_PADDING_Y = 12;
 export const BUTTON_COLOR = 0xfa5252;
 export const BUTTON_HOVER_COLOR = 0xc92a2a;
 
-export const createButton = async (
-  text: string,
-  onClick: () => void,
-  x: number = 0,
-  y: number = 0,
-): Promise<Container> => {
-  await Assets.load({
-    src: "/assets/fonts/Orbitron.woff2",
-    data: {
-      family: "Orbitron",
-    },
-  });
+export class Button extends Container {
+  private buttonGraphic: Graphics;
+  private buttonText: Text;
 
-  const buttonGraphic = new Graphics();
+  constructor(text: string, onClick: () => void, x: number = 0, y: number = 0) {
+    super();
 
-  const buttonText = new Text({
-    text,
-    style: {
-      fill: "#ffffff",
-      fontSize: 36,
-      fontFamily: "Orbitron",
-    },
-    anchor: 0.5,
-  });
+    this.buttonGraphic = new Graphics();
 
-  // Calculate button width and height dynamically
-  const buttonWidth = buttonText.width + BUTTON_PADDING_X;
-  const buttonHeight = buttonText.height + BUTTON_PADDING_Y;
+    this.buttonText = new Text({
+      text,
+      style: {
+        fill: "#ffffff",
+        fontSize: 36,
+        fontFamily: "Orbitron",
+      },
+      anchor: 0.5,
+    });
 
-  buttonGraphic.roundRect(0, 0, buttonWidth, buttonHeight, 15);
-  buttonGraphic.fill(BUTTON_COLOR);
+    // Calculate button width and height dynamically
+    const buttonWidth = this.buttonText.width + BUTTON_PADDING_X;
+    const buttonHeight = this.buttonText.height + BUTTON_PADDING_Y;
 
-  buttonText.x = buttonGraphic.width / 2;
-  buttonText.y = buttonGraphic.height / 2;
+    this.buttonGraphic.roundRect(0, 0, buttonWidth, buttonHeight, 15);
+    this.buttonGraphic.fill(BUTTON_COLOR);
 
-  const buttonContainer = new Container();
-  buttonContainer.x = Number(x);
-  buttonContainer.y = Number(y);
+    this.buttonText.x = this.buttonGraphic.width / 2;
+    this.buttonText.y = this.buttonGraphic.height / 2;
 
-  buttonContainer.addChild(buttonGraphic, buttonText);
+    this.x = Number(x);
+    this.y = Number(y);
 
-  buttonContainer.eventMode = "static";
-  buttonContainer.cursor = "pointer";
+    this.addChild(this.buttonGraphic, this.buttonText);
 
-  buttonContainer.on("pointerdown", onClick);
+    this.eventMode = "static";
+    this.cursor = "pointer";
 
-  buttonContainer.on("pointerover", () => {
-    buttonGraphic.tint = BUTTON_HOVER_COLOR;
-  });
+    this.on("pointerdown", onClick);
 
-  buttonContainer.on("pointerout", () => {
-    buttonGraphic.tint = BUTTON_COLOR;
-  });
+    this.on("pointerover", () => {
+      this.buttonGraphic.tint = BUTTON_HOVER_COLOR;
+    });
 
-  return buttonContainer;
-};
+    this.on("pointerout", () => {
+      this.buttonGraphic.tint = BUTTON_COLOR;
+    });
+  }
+
+  static async create(
+    text: string,
+    onClick: () => void,
+    x: number = 0,
+    y: number = 0,
+  ): Promise<Button> {
+    await Assets.load({
+      src: "/assets/fonts/Orbitron.woff2",
+      data: {
+        family: "Orbitron",
+      },
+    });
+
+    return new Button(text, onClick, x, y);
+  }
+}

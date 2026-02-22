@@ -1,29 +1,31 @@
 import { bulletConfig } from "../../components/Bullet/Bullet.config";
-import { createBullet } from "../../components/Bullet/Bullet";
+import { Bullet } from "../../components/Bullet/Bullet";
 import { Container, Ticker } from "pixi.js";
 import { handleGameStop, shouldStopGame, state } from "../../state";
 import app from "../../main";
 import { destroyEnemy } from "./enemy";
+import { Enemy } from "../../components/Enemy/Enemy";
+import { Rocket } from "../../components/Rocket/Rocket";
 
-export const handleBullets = (rocket: Container, background: Container) => {
+export const handleBullets = (rocket: Rocket, background: Container) => {
   let elapsed = 0;
 
   // Separate the bullet creation to keep the ticker clean
   const createNewBullet = async (
-    rocket: Container,
+    rocket: Rocket,
     background: Container,
-    bullets: Container[],
+    bullets: Bullet[],
   ) => {
     const x = rocket.x + rocket.width / 2 - bulletConfig.width / 2 + 2;
 
-    const bullet = await createBullet(x);
+    const bullet = await Bullet.create(x);
     bullet.y = rocket.y - bullet.height / 2;
 
     background.addChild(bullet);
     bullets.push(bullet);
   };
 
-  const isColliding = (bullet: Container, enemy: Container): boolean => {
+  const isColliding = (bullet: Bullet, enemy: Container): boolean => {
     return (
       bullet.y <= enemy.y &&
       bullet.x >= enemy.x &&
@@ -31,10 +33,19 @@ export const handleBullets = (rocket: Container, background: Container) => {
     );
   };
 
-  const destroyBullet = (bullet: Container, index: number) => {
+  const destroyBullet = (bullet: Bullet, index: number) => {
     background.removeChild(bullet);
     bullet.destroy();
     state.bullets.splice(index, 1);
+  };
+
+  const damageEnemy = (enemy: Enemy, j: number, bullet: Bullet) => {
+    enemy.takeDamage(bullet.damage);
+
+    if (enemy.isDead()) {
+      destroyEnemy(enemy, j, background);
+      state.enemiesKilled += 1;
+    }
   };
 
   const setupBullets = async (ticker: Ticker) => {
@@ -58,9 +69,8 @@ export const handleBullets = (rocket: Container, background: Container) => {
         const enemy = state.enemies[j];
 
         if (isColliding(bullet, enemy)) {
-          destroyEnemy(enemy, j, background);
+          damageEnemy(enemy, j, bullet);
           destroyBullet(bullet, i);
-          state.enemiesKilled += 1;
           break;
         }
       }

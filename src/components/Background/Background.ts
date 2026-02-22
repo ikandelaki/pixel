@@ -3,43 +3,58 @@ import app from "../../main";
 
 const BACKGROUND_SCROLL_SPEED = 0.5;
 
-export const createBackground = async () => {
-  const backgroundContainer = new Container();
-  const backgroundTexture = await Assets.load({
-    alias: "background",
-    src: "/assets/background.jpg",
-  });
-  const background = new Sprite(backgroundTexture);
+export class Background extends Container {
+  private background: Sprite;
 
-  const viewWidth = app.screen.width / 4;
-  const ratio = background.texture.orig.height / background.texture.orig.width;
-  const viewHeight = viewWidth * ratio;
+  constructor() {
+    super();
+  }
 
-  background.setSize(
-    background.texture.orig.width / 2,
-    background.texture.orig.height / 2,
-  );
-  backgroundContainer.addChild(background);
+  static async create(): Promise<Background> {
+    const backgroundInstance = new Background();
+    const backgroundTexture = await Assets.load({
+      alias: "background",
+      src: "/assets/background.jpg",
+    });
 
-  const mask = new Graphics().rect(0, 0, viewWidth, viewHeight).fill(0xffffff);
+    backgroundInstance.background = new Sprite(backgroundTexture);
 
-  backgroundContainer.addChild(mask);
-  backgroundContainer.mask = mask;
+    const viewWidth = app.screen.width / 4;
+    const ratio =
+      backgroundInstance.background.texture.orig.height /
+      backgroundInstance.background.texture.orig.width;
+    const viewHeight = viewWidth * ratio;
 
-  backgroundContainer.position.set(
-    app.screen.width / 2 - backgroundContainer.width / 2,
-    app.screen.height / 2 - backgroundContainer.height / 2,
-  );
+    backgroundInstance.background.setSize(
+      backgroundInstance.background.texture.orig.width / 2,
+      backgroundInstance.background.texture.orig.height / 2,
+    );
+    backgroundInstance.addChild(backgroundInstance.background);
 
-  background.y = -(background.height - viewHeight);
+    const mask = new Graphics()
+      .rect(0, 0, viewWidth, viewHeight)
+      .fill(0xffffff);
 
-  app.ticker.add((ticker) => {
-    const scrollDistance = BACKGROUND_SCROLL_SPEED * ticker.deltaTime;
+    backgroundInstance.addChild(mask);
+    backgroundInstance.mask = mask;
 
-    if (background.y < 0) {
-      background.y += scrollDistance;
-    }
-  });
+    backgroundInstance.position.set(
+      app.screen.width / 2 - backgroundInstance.width / 2,
+      app.screen.height / 2 - backgroundInstance.height / 2,
+    );
 
-  return backgroundContainer;
-};
+    backgroundInstance.background.y = -(
+      backgroundInstance.background.height - viewHeight
+    );
+
+    app.ticker.add((ticker) => {
+      const scrollDistance = BACKGROUND_SCROLL_SPEED * ticker.deltaTime;
+
+      if (backgroundInstance.background.y < 0) {
+        backgroundInstance.background.y += scrollDistance;
+      }
+    });
+
+    return backgroundInstance;
+  }
+}

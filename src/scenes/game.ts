@@ -1,13 +1,13 @@
-import { createRocket } from "../components/Rocket/Rocket";
-import { createBackground } from "../components/Background/Background";
+import { Rocket } from "../components/Rocket/Rocket";
+import { Background } from "../components/Background/Background";
 import app from "../main";
 import { handleEnemies } from "../handlers/movements/enemy";
 import { handleRocketMove } from "../handlers/movements/rocket";
 import { handleBullets } from "../handlers/movements/bullet";
 
 export const renderGame = async () => {
-  const background = await createBackground();
-  const rocket = await createRocket();
+  const background = await Background.create();
+  const rocket = await Rocket.create();
 
   background.addChild(rocket);
   rocket.position.set(

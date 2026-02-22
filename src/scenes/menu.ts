@@ -1,12 +1,12 @@
 import { Container } from "pixi.js";
 import app from "../main";
-import { createButton } from "../components/Button/Button";
+import { Button } from "../components/Button/Button";
 import { handleGameStart, handleGameStop } from "../state";
 
 export const renderMenu = async () => {
   const menuContainer = new Container();
-  const startButton = await createButton("Start", handleGameStart);
-  const pauseButton = await createButton(
+  const startButton = await Button.create("Start", handleGameStart);
+  const pauseButton = await Button.create(
     "Pause",
     handleGameStop,
     startButton.width + 50,

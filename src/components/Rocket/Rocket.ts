@@ -1,20 +1,28 @@
 import { Assets } from "pixi.js";
 import { rocketConfig } from "./Rocket.config";
-import { createCustomSprite } from "../CustomSprite/CustomSprite";
+import { CustomSprite } from "../CustomSprite/CustomSprite";
 
-export const createRocket = async (x: number = 0, y: number = 0) => {
-  const rocketTexture = await Assets.load({
-    alias: "rocket",
-    src: "/assets/rocket.png",
-  });
+export class Rocket extends CustomSprite {
+  constructor(x: number = 0, y: number = 0) {
+    super(undefined, rocketConfig.width, x, y);
+  }
 
-  const rocket = await createCustomSprite(
-    rocketTexture,
-    rocketConfig.width,
-    x,
-    y,
-  );
+  static async create(x: number = 0, y: number = 0): Promise<Rocket> {
+    const rocketTexture = await Assets.load({
+      alias: "rocket",
+      src: "/assets/rocket.png",
+    });
 
-  rocket.zIndex = 2;
-  return rocket;
-};
+    const rocket = new Rocket(x, y);
+    rocket["sprite"].texture = rocketTexture;
+
+    const originalWidth = rocketTexture.orig.width;
+    const originalHeight = rocketTexture.orig.height;
+    const aspectRatio = originalHeight / originalWidth;
+    rocket["sprite"].width = rocketConfig.width;
+    rocket["sprite"].height = aspectRatio * rocketConfig.width;
+
+    rocket.zIndex = 2;
+    return rocket;
+  }
+}

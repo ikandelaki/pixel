@@ -1,10 +1,12 @@
-import { Container, Ticker } from "pixi.js";
+import { Ticker } from "pixi.js";
 import app from "../main";
+import { Bullet } from "../components/Bullet/Bullet";
+import { Enemy } from "../components/Enemy/Enemy";
 
 type StateType = {
   isStarted: boolean;
-  enemies: Container[];
-  bullets: Container[];
+  enemies: Enemy[];
+  bullets: Bullet[];
   enemiesKilled: number;
 };
 

@@ -1,9 +1,8 @@
 import { Container, Ticker } from "pixi.js";
 import app from "../../main";
 import { enemyConfig } from "../../components/Enemy/Enemy.config";
-
+import { Enemy } from "../../components/Enemy/Enemy";
 import { handleGameStop, shouldStopGame, state } from "../../state";
-import { createEnemy } from "../../components/Enemy/Enemy";
 
 export const destroyEnemy = (
   enemy: Container,
@@ -23,7 +22,7 @@ export const handleEnemies = (background: Container) => {
       Math.ceil(Math.random() * background.width) - enemyConfig.width,
       enemyConfig.width,
     );
-    const enemy = await createEnemy(enemySpawnPointX);
+    const enemy = await Enemy.create(enemySpawnPointX);
     background.addChild(enemy);
 
     state.enemies.push(enemy);
