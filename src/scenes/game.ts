@@ -8,6 +8,7 @@ import {
   handleRocketMove,
   handleRocketBulletMove,
 } from "../handlers/movement";
+import { state } from "../state";
 
 export const renderGame = async () => {
   const background = await createBackground();
@@ -18,6 +19,8 @@ export const renderGame = async () => {
     enemyConfig.width,
   );
   const enemy = await createEnemy(enemySpawnPointX);
+
+  state.enemies.push(enemy);
 
   background.addChild(rocket);
   background.addChild(enemy);

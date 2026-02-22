@@ -11,6 +11,7 @@ import app from "../main";
 import { enemyConfig } from "../components/Enemy/Enemy.config";
 import { bulletConfig } from "../components/Bullet/Bullet.config";
 import { createBullet } from "../components/Bullet/Bullet";
+import { state } from "../state";
 
 export const handleRocketMove = (rocket: Container, background: Container) => {
   app.ticker.add(() => {
@@ -48,14 +49,18 @@ export const handleRocketMove = (rocket: Container, background: Container) => {
 
 export const handleEnemyMove = (enemy: Container, background: Container) => {
   const moveEnemy = () => {
+    if (!enemy || !state.enemies.includes(enemy)) {
+      app.ticker.remove(moveEnemy);
+      return;
+    }
+
     enemy.position.y += enemyConfig.speed;
 
-    if (enemy.position.y > background.height) {
+    if (enemy && enemy.position.y > background.height) {
       enemy.destroy({
         children: true,
       });
       app.ticker.remove(moveEnemy);
-      console.log(">> ticker stopped");
     }
   };
 
@@ -66,7 +71,6 @@ export const handleRocketBulletMove = (
   rocket: Container,
   background: Container,
 ) => {
-  const bullets: Container[] = [];
   let elapsed = 0;
 
   // Separate the bullet creation to keep the ticker clean
@@ -87,19 +91,39 @@ export const handleRocketBulletMove = (
   const createBulletAndShoot = async (ticker: Ticker) => {
     elapsed += ticker.deltaMS;
 
-    for (let i = bullets.length - 1; i >= 0; i--) {
-      const bullet = bullets[i];
+    for (let i = state.bullets.length - 1; i >= 0; i--) {
+      const bullet = state.bullets[i];
       bullet.y -= bulletConfig.speed;
 
       if (bullet.y + bullet.height < 0) {
         background.removeChild(bullet);
         bullet.destroy();
-        bullets.splice(i, 1);
+        state.bullets.splice(i, 1);
+        break;
+      }
+
+      for (let j = state.enemies.length - 1; j >= 0; j--) {
+        const enemy = state.enemies[j];
+
+        if (
+          bullet.y <= enemy.y &&
+          bullet.x >= enemy.x &&
+          bullet.x <= enemy.x + enemy.width
+        ) {
+          background.removeChild(enemy);
+          enemy.destroy();
+          state.enemies.splice(j, 1);
+
+          background.removeChild(bullet);
+          bullet.destroy();
+          state.bullets.splice(i, 1);
+          break;
+        }
       }
     }
 
     if (elapsed >= bulletConfig.spawnSpeed) {
-      createNewBullet(rocket, background, bullets);
+      createNewBullet(rocket, background, state.bullets);
       elapsed = 0;
     }
   };
