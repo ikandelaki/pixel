@@ -1,7 +1,7 @@
 import { bulletConfig } from "../../components/Bullet/Bullet.config";
 import { createBullet } from "../../components/Bullet/Bullet";
 import { Container, Ticker } from "pixi.js";
-import { state } from "../../state";
+import { handleGameStop, shouldStopGame, state } from "../../state";
 import app from "../../main";
 import { destroyEnemy } from "./enemy";
 
@@ -38,6 +38,11 @@ export const handleBullets = (rocket: Container, background: Container) => {
   };
 
   const setupBullets = async (ticker: Ticker) => {
+    if (shouldStopGame()) {
+      handleGameStop(setupBullets);
+      return;
+    }
+
     elapsed += ticker.deltaMS;
 
     for (let i = state.bullets.length - 1; i >= 0; i--) {
@@ -55,6 +60,7 @@ export const handleBullets = (rocket: Container, background: Container) => {
         if (isColliding(bullet, enemy)) {
           destroyEnemy(enemy, j, background);
           destroyBullet(bullet, i);
+          state.enemiesKilled += 1;
           break;
         }
       }

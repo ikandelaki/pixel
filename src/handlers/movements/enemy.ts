@@ -2,7 +2,7 @@ import { Container, Ticker } from "pixi.js";
 import app from "../../main";
 import { enemyConfig } from "../../components/Enemy/Enemy.config";
 
-import { state } from "../../state";
+import { handleGameStop, shouldStopGame, state } from "../../state";
 import { createEnemy } from "../../components/Enemy/Enemy";
 
 export const destroyEnemy = (
@@ -30,6 +30,11 @@ export const handleEnemies = (background: Container) => {
   };
 
   const setupEnemies = (ticker: Ticker) => {
+    if (shouldStopGame()) {
+      handleGameStop(setupEnemies);
+      return;
+    }
+
     elapsed += ticker.elapsedMS;
 
     for (let i = state.enemies.length - 1; i >= 0; i--) {
