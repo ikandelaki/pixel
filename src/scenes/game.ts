@@ -3,11 +3,9 @@ import { createBackground } from "../components/Background/Background";
 import app from "../main";
 import { createEnemy } from "../components/Enemy/Enemy";
 import { enemyConfig } from "../components/Enemy/Enemy.config";
-import {
-  handleEnemyMove,
-  handleRocketMove,
-  handleBullets,
-} from "../handlers/movement";
+import { handleEnemyMove } from "../handlers/movements/enemy";
+import { handleRocketMove } from "../handlers/movements/rocket";
+import { handleBullets } from "../handlers/movements/bullet";
 import { state } from "../state";
 
 export const renderGame = async () => {
