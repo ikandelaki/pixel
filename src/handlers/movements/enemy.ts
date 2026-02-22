@@ -42,6 +42,7 @@ export const handleEnemies = (background: Container) => {
 
       if (enemy && enemy.position.y > background.height) {
         destroyEnemy(enemy, i, background);
+        state.lives -= 1;
       }
     }
 

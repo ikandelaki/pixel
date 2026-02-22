@@ -8,6 +8,7 @@ type StateType = {
   enemies: Enemy[];
   bullets: Bullet[];
   enemiesKilled: number;
+  lives: number;
 };
 
 export const state: StateType = {
@@ -15,6 +16,7 @@ export const state: StateType = {
   enemies: [],
   bullets: [],
   enemiesKilled: 0,
+  lives: 3,
 };
 
 export const handleGameStart = () => {
@@ -34,5 +36,5 @@ export const handleGameStop = (
 };
 
 export const shouldStopGame = () => {
-  return state.enemiesKilled >= 5;
+  return state.enemiesKilled >= 5 || !state.lives;
 };
