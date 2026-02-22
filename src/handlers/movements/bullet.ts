@@ -3,6 +3,7 @@ import { createBullet } from "../../components/Bullet/Bullet";
 import { Container, Ticker } from "pixi.js";
 import { state } from "../../state";
 import app from "../../main";
+import { destroyEnemy } from "./enemy";
 
 export const handleBullets = (rocket: Container, background: Container) => {
   let elapsed = 0;
@@ -36,12 +37,6 @@ export const handleBullets = (rocket: Container, background: Container) => {
     state.bullets.splice(index, 1);
   };
 
-  const destroyEnemy = (enemy: Container, index: number) => {
-    background.removeChild(enemy);
-    enemy.destroy();
-    state.enemies.splice(index, 1);
-  };
-
   const setupBullets = async (ticker: Ticker) => {
     elapsed += ticker.deltaMS;
 
@@ -58,7 +53,7 @@ export const handleBullets = (rocket: Container, background: Container) => {
         const enemy = state.enemies[j];
 
         if (isColliding(bullet, enemy)) {
-          destroyEnemy(enemy, j);
+          destroyEnemy(enemy, j, background);
           destroyBullet(bullet, i);
           break;
         }
