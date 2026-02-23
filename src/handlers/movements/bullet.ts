@@ -1,19 +1,21 @@
 import { bulletConfig } from "../../components/Bullet/Bullet.config";
 import { Bullet } from "../../components/Bullet/Bullet";
-import { Container, Ticker } from "pixi.js";
+import { Ticker } from "pixi.js";
 import { handleGameStop, shouldStopGame, state } from "../../state";
 import app from "../../main";
 import { destroyEnemy } from "./enemy";
 import { Enemy } from "../../components/Enemy/Enemy";
 import { Rocket } from "../../components/Rocket/Rocket";
+import { Background } from "../../components/Background/Background";
+import { rocketConfig } from "../../components/Rocket/Rocket.config";
 
-export const handleBullets = (rocket: Rocket, background: Container) => {
+export const handleBullets = (rocket: Rocket, background: Background) => {
   let elapsed = 0;
 
   // Separate the bullet creation to keep the ticker clean
   const createNewBullet = async (
     rocket: Rocket,
-    background: Container,
+    background: Background,
     bullets: Bullet[],
   ) => {
     const x = rocket.x + rocket.width / 2 - bulletConfig.width / 2 + 2;
@@ -25,7 +27,7 @@ export const handleBullets = (rocket: Rocket, background: Container) => {
     bullets.push(bullet);
   };
 
-  const isColliding = (bullet: Bullet, enemy: Container): boolean => {
+  const isColliding = (bullet: Bullet, enemy: Enemy): boolean => {
     return (
       bullet.y <= enemy.y &&
       bullet.x >= enemy.x &&
@@ -45,6 +47,7 @@ export const handleBullets = (rocket: Rocket, background: Container) => {
     if (enemy.isDead()) {
       destroyEnemy(enemy, j, background);
       state.enemiesKilled += 1;
+      rocketConfig.speed += 0.1;
     }
   };
 
