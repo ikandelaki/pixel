@@ -29,5 +29,6 @@ export default class Heart extends CustomSprite {
 
   enable() {
     this.isFull = true;
+    this.alpha = 1;
   }
 }

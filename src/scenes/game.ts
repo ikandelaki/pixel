@@ -5,6 +5,7 @@ import { handleEnemies } from "../handlers/movements/enemy";
 import { handleRocketMove } from "../handlers/movements/rocket";
 import { handleBullets } from "../handlers/movements/bullet";
 import { initializeLives } from "../handlers/lives";
+import { renderSettingsButton } from "../handlers/settings";
 
 export const renderGame = async () => {
   const background = await Background.create();
@@ -16,6 +17,7 @@ export const renderGame = async () => {
     background.height - rocket.height,
   );
 
+  renderSettingsButton(rocket, background);
   initializeLives(background);
   handleRocketMove(rocket, background);
   handleEnemies(background);

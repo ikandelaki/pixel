@@ -3,6 +3,7 @@ import { initDevtools } from "@pixi/devtools";
 import { renderMenu } from "./scenes/menu";
 import { renderGame } from "./scenes/game";
 import { setupKeyboardListeners } from "./handlers/keyboard";
+import { renderSettingsButton } from "./handlers/settings";
 
 const renderOnBackground = async (app: Application) => {
   const bgManifest = {
