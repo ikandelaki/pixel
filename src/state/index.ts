@@ -33,11 +33,19 @@ export let state: StateType = {
   lives: 3,
 };
 
+/**
+ * Resume rendering and start the game
+ */
 export const handleGameStart = () => {
   state.isStarted = true;
   app.start();
 };
 
+/**
+ * Stop the game (currently only pauses it in the current state, so it is more like pause)
+ *
+ * @param tickerFn
+ */
 export const handleGameStop = (
   tickerFn?: (ticker: Ticker) => Promise<void> | void,
 ) => {
@@ -49,12 +57,23 @@ export const handleGameStop = (
   }
 };
 
+/**
+ * Get true or false value to determine if the game should be stopped
+ * - Can be added new conditions in the future
+ *
+ * @returns
+ */
 export const shouldStopGame = () => {
   return !state.lives;
 };
 
+/**
+ * Method to be used to reset the game to its initial state.
+ *
+ * @param rocket
+ * @param background
+ */
 export const restartGameState = (rocket: Rocket, background: Background) => {
-  // Remove and destroy all enemies and bullets
   state.enemies.forEach((enemy) => {
     background.removeChild(enemy);
     enemy.destroy();
