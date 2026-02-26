@@ -6,24 +6,23 @@ import app from "../main";
 import { Rocket } from "../components/Rocket/Rocket";
 
 let settingsOpen = false;
+let settingsContainer: Container | null = null;
 
-// --- ANIMATION ---
 const openSettings = async (background: Background) => {
-  // --- SETTINGS CONTAINER ---
-  const settingsContainer = new Container();
+  if (settingsContainer) return;
+
+  settingsContainer = new Container();
+  settingsContainer.zIndex = 98;
   background.addChild(settingsContainer);
 
-  // LOAD FIRST
   const texture = await Assets.load("/assets/settings_background.png");
 
-  // THEN create sprite
   const settingsBg = new Sprite(texture);
   settingsBg.width = background.width;
   settingsBg.height = background.height;
   settingsContainer.addChild(settingsBg);
-  settingsContainer.zIndex = 98;
 
-  // start hidden (top-right, outside screen)
+  // start hidden (top-right)
   settingsContainer.x = background.width;
   settingsContainer.y = -settingsBg.height;
 
@@ -33,24 +32,50 @@ const openSettings = async (background: Background) => {
   app.ticker.add(slideIn);
 
   function slideIn(ticker: Ticker) {
-    // SpeedX is different because its width and height differ
     const speedX =
-      (50 * ticker.deltaTime * settingsContainer.width) /
-      settingsContainer.height;
+      (50 * ticker.deltaTime * settingsContainer!.width) /
+      settingsContainer!.height;
     const speedY = 50 * ticker.deltaTime;
 
-    if (settingsContainer.x > targetX) {
-      settingsContainer.x -= speedX;
-    }
-    if (settingsContainer.y < targetY) {
-      settingsContainer.y += speedY;
-    }
+    settingsContainer!.x -= speedX;
+    settingsContainer!.y += speedY;
 
-    // stop animation when arrived
-    if (settingsContainer.x <= targetX && settingsContainer.y >= targetY) {
-      settingsContainer.x = targetX;
-      settingsContainer.y = targetY;
+    if (settingsContainer!.x <= targetX && settingsContainer!.y >= targetY) {
+      settingsContainer!.x = targetX;
+      settingsContainer!.y = targetY;
       app.ticker.remove(slideIn);
+    }
+  }
+};
+
+const closeSettings = (background: Background) => {
+  if (!settingsContainer) return;
+
+  const targetX = background.width;
+  const targetY = -settingsContainer.height;
+
+  app.ticker.add(slideOut);
+
+  function slideOut(ticker: Ticker) {
+    const speedX =
+      (50 * ticker.deltaTime * settingsContainer!.width) /
+      settingsContainer!.height;
+    const speedY = 50 * ticker.deltaTime;
+
+    settingsContainer!.x += speedX;
+    settingsContainer!.y -= speedY;
+
+    if (settingsContainer!.x >= targetX && settingsContainer!.y <= targetY) {
+      settingsContainer!.x = targetX;
+      settingsContainer!.y = targetY;
+
+      background.removeChild(settingsContainer!);
+      settingsContainer!.destroy({ children: true });
+
+      settingsContainer = null;
+      settingsOpen = false;
+
+      app.ticker.remove(slideOut);
     }
   }
 };
@@ -75,7 +100,11 @@ export const renderSettingsButton = async (
   settingsButton.cursor = "pointer";
 
   settingsButton.addEventListener("pointerdown", async () => {
-    if (settingsOpen) return;
+    if (settingsOpen) {
+      settingsOpen = false;
+      closeSettings(background);
+    }
+
     settingsOpen = true;
 
     handleGameStop();
