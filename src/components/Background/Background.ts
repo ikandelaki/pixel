@@ -1,5 +1,6 @@
 import { Sprite, Assets, Container, Graphics } from "pixi.js";
 import app from "../../main";
+import { state } from "../../state";
 
 const BACKGROUND_SCROLL_SPEED = 0.5;
 
@@ -48,6 +49,10 @@ export class Background extends Container {
     );
 
     app.ticker.add((ticker) => {
+      if (!state.isStarted) {
+        return;
+      }
+
       const scrollDistance = BACKGROUND_SCROLL_SPEED * ticker.deltaTime;
 
       if (backgroundInstance.background.y < 0) {

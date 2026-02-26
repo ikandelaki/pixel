@@ -1,4 +1,4 @@
-import { State, Ticker } from "pixi.js";
+import { Ticker } from "pixi.js";
 import app from "../main";
 import { Bullet } from "../components/Bullet/Bullet";
 import { Enemy } from "../components/Enemy/Enemy";
@@ -50,7 +50,6 @@ export const handleGameStop = (
   tickerFn?: (ticker: Ticker) => Promise<void> | void,
 ) => {
   state.isStarted = false;
-  app.stop();
 
   if (tickerFn) {
     app.ticker.remove(tickerFn);

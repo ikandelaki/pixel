@@ -2,9 +2,14 @@ import { Container } from "pixi.js";
 import { rocketConfig } from "../../components/Rocket/Rocket.config";
 import { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, keyState } from "../keyboard";
 import app from "../../main";
+import { state } from "../../state";
 
 export const handleRocketMove = (rocket: Container, background: Container) => {
   app.ticker.add(() => {
+    if (!state.isStarted) {
+      return;
+    }
+
     if (keyState.has(KEY_UP)) {
       const nextYUp = rocket.y - rocketConfig.speed;
       if (nextYUp >= 0) {

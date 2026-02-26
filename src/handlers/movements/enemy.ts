@@ -41,6 +41,10 @@ export const handleEnemies = (background: Background) => {
   };
 
   const setupEnemies = (ticker: Ticker) => {
+    if (!state.isStarted) {
+      return;
+    }
+
     if (shouldStopGame()) {
       handleGameStop(setupEnemies);
       return;

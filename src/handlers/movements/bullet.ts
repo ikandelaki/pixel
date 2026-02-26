@@ -52,6 +52,10 @@ export const handleBullets = (rocket: Rocket, background: Background) => {
   };
 
   const setupBullets = async (ticker: Ticker) => {
+    if (!state.isStarted) {
+      return;
+    }
+
     if (shouldStopGame()) {
       handleGameStop(setupBullets);
       return;
