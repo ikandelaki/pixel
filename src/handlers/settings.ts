@@ -58,9 +58,9 @@ const closeSettings = (background: Background) => {
 
   function slideOut(ticker: Ticker) {
     const speedX =
-      (50 * ticker.deltaTime * settingsContainer!.width) /
+      (60 * ticker.deltaTime * settingsContainer!.width) /
       settingsContainer!.height;
-    const speedY = 50 * ticker.deltaTime;
+    const speedY = 60 * ticker.deltaTime;
 
     settingsContainer!.x += speedX;
     settingsContainer!.y -= speedY;
