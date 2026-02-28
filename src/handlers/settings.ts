@@ -16,7 +16,7 @@ const PADDING_Y = 96;
 const createSoundSection = async () => {
   const soundSectionContainer = new Container();
   const soundText = new Text({
-    text: "Sound",
+    text: `Sound ${config.volume * 100}`,
     style: {
       fontSize: 24,
       fill: "#ffffff",
@@ -39,6 +39,7 @@ const createSoundSection = async () => {
     (v) => {
       config.volume = v;
       sound.volumeAll = v;
+      soundText.text = `Sound ${Math.round(v * 100)}`;
     },
   );
 
