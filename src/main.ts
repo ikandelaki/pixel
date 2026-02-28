@@ -3,7 +3,7 @@ import { initDevtools } from "@pixi/devtools";
 import { renderMenu } from "./scenes/menu";
 import { renderGame } from "./scenes/game";
 import { setupKeyboardListeners } from "./handlers/keyboard";
-import { renderSettingsButton } from "./handlers/settings";
+import { sound } from "@pixi/sound";
 
 const renderOnBackground = async (app: Application) => {
   const bgManifest = {
@@ -50,6 +50,10 @@ export default app;
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   setupKeyboardListeners();
+  sound.add({
+    laser: "/assets/sounds/shoot.mp3",
+    explosion: "/assets/sounds/explosion.mp3",
+  });
   await renderMenu();
   await renderGame();
   renderOnBackground(app);

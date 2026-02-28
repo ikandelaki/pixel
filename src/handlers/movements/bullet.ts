@@ -8,6 +8,7 @@ import { Enemy } from "../../components/Enemy/Enemy";
 import { Rocket } from "../../components/Rocket/Rocket";
 import { Background } from "../../components/Background/Background";
 import { rocketConfig } from "../../components/Rocket/Rocket.config";
+import { playExplosionSound, playLaserSound } from "../../sounds/laser";
 
 export const handleBullets = (rocket: Rocket, background: Background) => {
   let elapsed = 0;
@@ -25,6 +26,7 @@ export const handleBullets = (rocket: Rocket, background: Background) => {
 
     background.addChild(bullet);
     bullets.push(bullet);
+    playLaserSound();
   };
 
   const isColliding = (bullet: Bullet, enemy: Enemy): boolean => {
@@ -45,6 +47,7 @@ export const handleBullets = (rocket: Rocket, background: Background) => {
     enemy.takeDamage(bullet.damage);
 
     if (enemy.isDead()) {
+      playExplosionSound();
       destroyEnemy(enemy, j, background);
       state.enemiesKilled += 1;
       rocketConfig.speed += 0.1;

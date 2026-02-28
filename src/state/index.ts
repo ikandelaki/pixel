@@ -15,6 +15,12 @@ type StateType = {
   lives: number;
 };
 
+type ConfigStateType = {};
+
+export const configState: ConfigStateType = {
+  sound: 100,
+};
+
 export const initialState: Readonly<StateType> = {
   isStarted: false,
   enemies: [],
