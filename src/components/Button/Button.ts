@@ -2,14 +2,21 @@ import { Assets, Container, Graphics, Text } from "pixi.js";
 
 export const BUTTON_PADDING_X = 24;
 export const BUTTON_PADDING_Y = 12;
-export const BUTTON_COLOR = 0xfa5252;
-export const BUTTON_HOVER_COLOR = 0xc92a2a;
+export const BUTTON_COLOR = 0x343a40;
+export const BUTTON_HOVER_COLOR = 0x212529;
+export const BUTTON_FONTSIZE = 36;
 
 export class Button extends Container {
   private buttonGraphic: Graphics;
-  private buttonText: Text;
+  public buttonText: Text;
 
-  constructor(text: string, onClick: () => void, x: number = 0, y: number = 0) {
+  constructor(
+    text: string,
+    onClick: () => void,
+    x: number = 0,
+    y: number = 0,
+    fontSize: number = 0,
+  ) {
     super();
 
     this.buttonGraphic = new Graphics();
@@ -18,7 +25,7 @@ export class Button extends Container {
       text,
       style: {
         fill: "#ffffff",
-        fontSize: 36,
+        fontSize: fontSize || 36,
         fontFamily: "Orbitron",
       },
       anchor: 0.5,
@@ -49,7 +56,7 @@ export class Button extends Container {
     });
 
     this.on("pointerout", () => {
-      this.buttonGraphic.tint = BUTTON_COLOR;
+      this.buttonGraphic.tint = 0xffffff;
     });
   }
 
@@ -58,6 +65,7 @@ export class Button extends Container {
     onClick: () => void,
     x: number = 0,
     y: number = 0,
+    fontSize: number = 0,
   ): Promise<Button> {
     await Assets.load({
       src: "/assets/fonts/Orbitron.woff2",
@@ -66,6 +74,6 @@ export class Button extends Container {
       },
     });
 
-    return new Button(text, onClick, x, y);
+    return new Button(text, onClick, x, y, fontSize);
   }
 }

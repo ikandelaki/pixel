@@ -4,11 +4,22 @@ import { CustomSprite } from "../components/CustomSprite/CustomSprite";
 import { handleGameStop, restartGameState } from "../state";
 import app from "../main";
 import { Rocket } from "../components/Rocket/Rocket";
+import { Button } from "../components/Button/Button";
 
 let settingsOpen = false;
 let settingsContainer: Container | null = null;
 
-const openSettings = async (background: Background) => {
+const createRestartButton = async (rocket: Rocket, background: Background) => {
+  const handleButtonClick = () => {
+    restartGameState(rocket, background);
+    closeSettings(background);
+  };
+
+  const button = await Button.create("Restart", handleButtonClick, 0, 0, 18);
+  return button;
+};
+
+const openSettings = async (rocket: Rocket, background: Background) => {
   if (settingsContainer) return;
 
   settingsContainer = new Container();
@@ -21,6 +32,14 @@ const openSettings = async (background: Background) => {
   settingsBg.width = background.width;
   settingsBg.height = background.height;
   settingsContainer.addChild(settingsBg);
+
+  const restartButton = await createRestartButton(rocket, background);
+  settingsContainer.addChild(restartButton);
+  restartButton.position.set(
+    (settingsContainer.x + settingsContainer.width) / 2 -
+      restartButton.width / 2,
+    settingsContainer.y + settingsContainer.height - 150,
+  );
 
   // start hidden (top-right)
   settingsContainer.x = background.width;
@@ -108,12 +127,12 @@ export const renderSettingsButton = async (
     settingsOpen = true;
 
     handleGameStop();
-    restartGameState(rocket, background);
+    // restartGameState(rocket, background);
 
     // Force a render update to display changes immediately
     app.renderer.render(app.stage);
 
-    await openSettings(background);
+    await openSettings(rocket, background);
   });
 
   background.addChild(settingsButton);
