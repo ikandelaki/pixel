@@ -1,13 +1,52 @@
 import { Background } from "./../components/Background/Background";
-import { Assets, Container, Sprite, Ticker } from "pixi.js";
+import { Assets, Container, Sprite, Ticker, Text } from "pixi.js";
+import { sound } from "@pixi/sound";
 import { CustomSprite } from "../components/CustomSprite/CustomSprite";
-import { handleGameStop, restartGameState } from "../state";
+import { config, handleGameStop, restartGameState } from "../state";
 import app from "../main";
+import { Slider } from "../components/Slider/Slider";
 import { Rocket } from "../components/Rocket/Rocket";
 import { Button } from "../components/Button/Button";
 
 let settingsOpen = false;
 let settingsContainer: Container | null = null;
+const PADDING_X = 72;
+const PADDING_Y = 96;
+
+const createSoundSection = async () => {
+  const soundSectionContainer = new Container();
+  const soundText = new Text({
+    text: "Sound",
+    style: {
+      fontSize: 24,
+      fill: "#ffffff",
+      dropShadow: {
+        color: "#000000",
+        blur: 4,
+        distance: 6,
+      },
+    },
+  });
+
+  soundSectionContainer.addChild(soundText);
+
+  // create a Pixi slider instead of DOM input
+  const slider = await Slider.create(
+    250, // width
+    0,
+    1,
+    config.volume,
+    (v) => {
+      config.volume = v;
+      sound.volumeAll = v;
+    },
+  );
+
+  slider.position.set(0, soundText.height + 10);
+  soundSectionContainer.addChild(slider);
+
+  return soundSectionContainer;
+};
 
 const createRestartButton = async (rocket: Rocket, background: Background) => {
   const handleButtonClick = () => {
@@ -33,6 +72,12 @@ const openSettings = async (rocket: Rocket, background: Background) => {
   settingsBg.height = background.height;
   settingsContainer.addChild(settingsBg);
 
+  // Render sound section
+  const soundSection = await createSoundSection();
+  soundSection.position.set(PADDING_X, PADDING_Y);
+  settingsContainer.addChild(soundSection);
+
+  // Render restart button
   const restartButton = await createRestartButton(rocket, background);
   settingsContainer.addChild(restartButton);
   restartButton.position.set(

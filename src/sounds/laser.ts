@@ -1,11 +1,12 @@
 import { sound } from "@pixi/sound";
+import { config } from "../state";
 
 export function playLaserSound() {
-  sound.play("laser");
+  sound.play("laser", { volume: config.volume });
 }
 
 export function playExplosionSound() {
-  sound.play("explosion");
+  sound.play("explosion", { volume: config.volume });
 }
 
 export function startSpaceAmbience() {

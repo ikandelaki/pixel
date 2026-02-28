@@ -15,10 +15,12 @@ type StateType = {
   lives: number;
 };
 
-type ConfigStateType = {};
+type ConfigType = {
+  volume: number;
+};
 
-export const configState: ConfigStateType = {
-  sound: 100,
+export const config: ConfigType = {
+  volume: 0.5,
 };
 
 export const initialState: Readonly<StateType> = {
